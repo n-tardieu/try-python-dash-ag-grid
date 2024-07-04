@@ -1,4 +1,5 @@
 import colorlover
+from constantes.carColors import carColors
 
 
 def discrete_background_color_bins(df, n_bins=5, columns="all"):
@@ -28,6 +29,23 @@ def discrete_background_color_bins(df, n_bins=5, columns="all"):
         )
 
     return styleConditions
+
+def create_car_style(df, column: str):  # Assurez-vous que column est bien une str
+
+    if column not in df.columns:
+        raise ValueError(f"La colonne {column} n'existe pas dans le DataFrame.")
+
+    styleConditions = []
+    unique_values = [str(value) for value in df[column].unique()]
+
+    for value in unique_values:
+        if value in carColors:
+            styleConditions.append({
+                "condition": f"params.value == '{value}'",
+                "style": {"backgroundColor": carColors[value], "color": "white"},
+            })
+    return styleConditions
+
 
 def discrete_background_color_bins_for_datagrid(df, n_bins=5, columns='all'):
     import colorlover

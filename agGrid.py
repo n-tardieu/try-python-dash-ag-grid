@@ -3,7 +3,7 @@ import dash_ag_grid as dag
 import pandas as pd
 
 from dash import html
-from utils.styleCondition import discrete_background_color_bins
+from utils.styleCondition import discrete_background_color_bins, create_car_style
 
 
 data = pd.read_json("./stintFile.json")
@@ -12,7 +12,7 @@ df = pd.DataFrame(data)
 # Générer les conditions de style pour la coloration des cellules
 n_bins = 5  # Nombre de bins pour la coloration
 styleConditionKpi = discrete_background_color_bins(df, n_bins=n_bins, columns=["kpi"])
-styleConditionCarNumber = discrete_background_color_bins(df, n_bins=n_bins, columns=["carNumber"])
+styleConditionCarNumber = create_car_style(df, column="carNumber")
 
 app = dash.Dash(__name__)
 
