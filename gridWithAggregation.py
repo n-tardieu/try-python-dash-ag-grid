@@ -11,10 +11,6 @@ df = pd.DataFrame(data)
 
 # Générer les conditions de style pour la coloration des cellules
 n_bins = 5  # Nombre de bins pour la coloration
-styleConditionKpi = discrete_background_color_bins(df, n_bins=n_bins, columns=["kpi"])
-styleConditionAverage = discrete_background_color(df, columns=["Average"])
-styleConditionIdeal = discrete_background_color_red_by_blue(df, columns=["Ideal"]) 
-styleConditionCarNumber = create_car_style(df, column="carNumber")
 styleConditions = discrete_background_color_last_row(df)
 
 app = dash.Dash(__name__)
@@ -27,7 +23,6 @@ columns = [
     {
         "headerName": "KPI",
         "field": "kpi"
-        # Appliquer les styles conditionnels ici
     },
 ]
 
