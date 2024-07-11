@@ -21,43 +21,23 @@ data = {
 }
 
 df = pd.DataFrame(data)
+unique_car_numbers = df['CarNumber'].unique()
+
 df = df.set_index("CarNumber").T.reset_index().rename(columns={"index": "Label"})
 styleConditions = discrete_background_color_last_row(df)
 
 # Define columns for AgGrid
-column_defs = [
-    {"headerName": "On the FCY", "children": [
+column_defs = [{"headerName": "On the FCY", "children": [
         {"headerName": "Sector", "field": "Label"}
-    ]},
-    {"headerName": "#36", "children": [
-        {"headerName": "IP2-FL", "field": "#36"}
-    ]},
-    {"headerName": "#38", "children": [
-        {"headerName": "IP2-FL", "field": "#38"}
-    ]},
-    {"headerName": "#50", "children": [
-        {"headerName": "IP2-FL", "field": "#50"}
-    ]},
-    {"headerName": "#51", "children": [
-        {"headerName": "IP2-FL", "field": "#51"}
-    ]},
-    {"headerName": "#63", "children": [
-        {"headerName": "IP2-FL", "field": "#63"}
-    ]},
-    {"headerName": "#83", "children": [
-        {"headerName": "IP2-FL", "field": "#83"}
-    ]},
-    {"headerName": "#93", "children": [
-        {"headerName": "IP2-FL", "field": "#93"}
-    ]},
-    {"headerName": "#94", "children": [
-        {"headerName": "IP2-FL", "field": "#94"}
-    ]},
-    {"headerName": "#99", "children": [
-        {"headerName": "IP2-FL", "field": "#99"}
-    ]}
-]
+]}]
 
+for car_number in unique_car_numbers:
+    column_defs.append({
+        "headerName": car_number,
+        "children": [
+            {"headerName": "IP2-FL", "field": car_number}
+        ]
+    })
 # Initialize the Dash app
 app = dash.Dash(__name__)
 
