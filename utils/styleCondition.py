@@ -152,32 +152,35 @@ def discrete_background_color_bins_for_datagrid(df, n_bins=5, columns='all'):
     return styles
 
 def discrete_background_color_last_row(df, n_bins=5, columns="all"):
+    # Sélectionner uniquement les lignes de l'index 'len(df) - 1'
+    last_rows_df = df.iloc[-1:]
+
     bounds = [i * (1.0 / n_bins) for i in range(n_bins + 1)]
+    
     if columns == "all":
-        df_numeric_columns = df.select_dtypes("number")
+        df_numeric_columns = last_rows_df.select_dtypes("number")
     else:
-        df_numeric_columns = df[columns]
+        df_numeric_columns = last_rows_df[columns]
+
+    # Calculer df_max et df_min uniquement sur les lignes sélectionnées
     df_max = df_numeric_columns.max().max()
     df_min = df_numeric_columns.min().min()
+
     ranges = [((df_max - df_min) * i) + df_min for i in bounds]
     styleConditions = []
-    legend = []
+
     for i in range(1, len(bounds)):
         min_bound = ranges[i - 1]
         max_bound = ranges[i]
         if i == len(bounds) - 1:
             max_bound += 1
 
-        backgroundColor = colorlover.scales[str(n_bins)]["seq"]["Blues"][i - 1]
+        backgroundColor = scales[str(n_bins)]["seq"]["Blues"][i - 1]
         color = "white" if i > len(bounds) / 2.0 else "inherit"
 
-        styleConditions.append(
-            {
-                "condition": f"params.node.rowIndex === {len(df) - 1} && params.value >= {min_bound} && params.value < {max_bound}",
-                "style": {"backgroundColor": backgroundColor, "color": color},
-            }
-        )
-
-     
+        styleConditions.append({
+            "condition": f"params.node.rowIndex === {len(df) - 1} && params.value >= {min_bound} && params.value < {max_bound}",
+            "style": {"backgroundColor": backgroundColor, "color": color},
+        })
 
     return styleConditions
